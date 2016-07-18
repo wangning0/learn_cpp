@@ -1,3 +1,6 @@
+// #inclue <cstdlib>包含了srand() rand() exit()等用法
+// 当我们调用一个函数时，会在内存中建立起一块特殊区域，称为'程序堆栈(program stack)'，这块特殊区域提供了每个函数参数的储存空间。他也提供了函数所定义的每个对象的
+  // 内存空间。我们称它为local object(局部对象)／一旦函数完成，这块内存就被释放掉，从program stack被pop出来。
 // int ival = 1024; 对象，类型为int
 // int *pi = &ival; 指针，指向一个int对象
 // int &rval = ival 引用，代表一个int对象
@@ -27,3 +30,54 @@
   // 函数指针式指向函数的指针变量，即本质是一个指针变量 int (*f)(int x)指向一个返回整型值的函数
 // 如果此文件被认定为标准的或项目专属的头文件，我们便使用尖括号将文件名包住，编译器在搜索此文件时，会在某些默认的磁盘目录中寻找
 // 如果此文件名被双引号包住，此文件便被认为是一个用户提供的头文件，搜素此文件时，会由要包含此文件的文件所在的磁盘目录开始寻找
+// STL主要由两种组件构成：一是容器，包括vector list set map。二是 用以操作这些容器的所谓泛型算法(generic algotithm)
+// vector list 顺序性容器
+// map 是key/value的组合。 set仅包含key
+// array是指针 ++array指向下一个元素的指针
+// list也是一个容器，不同的是list的元素以一组指针相互链接：前向指针指向下一个元素，后向指针指向上一个元素
+// 指针的算术运算必须首先假设多有元素都储存在连续的空间里。
+// 每一个标准容器都提供一个名为begin()的函数，可返回一个iterator,指向第一个元素。end()的函数，可返回一个iterator,指向最后一个元素
+  // iterator定义方式:
+  // vector<string> svec;
+  // vector<string>::iterator iter = svec.begin();
+  //此处iter被定义为一个iterator，指向一个vector， 双冒号表示此iterator乃是位于string vector定义内的嵌套类型。
+// 对于const vector 我们使用const_iterator来进行遍历操作
+  // const vector<string> cs_vec;
+  // vector<string>::const_iterator iter = cs_vec.begin();
+// 所有容器共通操作
+  // empty()会在容易无任何元素时返回true，否则返回false
+  // size()返回容器内目前持有的元素个数
+  // clear()删除所有元素
+  // begin()返回一个iterator 指向容器的第一个元素
+  // end()返回一个iterator 指向容器的最后一个元素
+  // insert()将单一或某个范围内的元素插入容器内
+  // erase()将容器内的单一元素或某个范围内的元素删除
+// list指针包含三个字段 value back指针(指向前一个元素) front指针(指向下一个元素)
+// deque 顺序性容器 对于最前端元素的插入和删除操作，效率更高，末端元素亦同
+// 定义顺序性容器对象的五种方式
+  // 产生新的容器
+    // list<string> slist
+    // vector<int> ivec
+  // 产生特定大小的容器
+    // list<int> ilist(1024)
+    // vector<int> ivec(29)
+  // 产生特定大小的容器并指定初值
+    // list<string> slist(16,"hello")
+  // 通过一对iterator产生容器。这对iterator用来标示一整组做为初值的元素的范围
+    // int ia[8] = {1,2,3,4,5,6,7,8};
+    // vector<int> ivec(ia, ia+8);
+  // 根据某个容器产生出新容器，复制原容器内的元素，做为新容器的初值
+    // list<string> slist;
+    // list<string> slist2(slist);
+// push_back() pop_back() 在容器末尾进行插入删除操作
+// list deque 提供了 push_front() pop_front()
+// 在容器中读取首末端的值 front() back()
+// iterator.insert(iterator position,elemType value) 将value插入到position之前，会返回一个iterator，指向被插入的元素
+// void insert(iterator position,int count, elemType value)可在position之前插入count个元素，这些元素的值都和value相同
+// void insert(iterator1 postion,iterator2 first,iterator2 last)可在position之前插入[first,last)所标示的各个元素
+// iterator insert(iterator position) 可在position之前插入元素。元素的初值为其所属类型的默认值
+// iterator erase(iterator position) 可删除position所指的元素
+// iterator erase(iterator first, iterator last)可删除[first,last)范围内的元素
+// 注意的是：list不直接iterator的便宜运算 即slist.erase(it1,it1+num_tries)
+// 泛型算法 头文件#include<algorithm>
+
