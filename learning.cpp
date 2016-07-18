@@ -80,4 +80,45 @@
 // iterator erase(iterator first, iterator last)可删除[first,last)范围内的元素
 // 注意的是：list不直接iterator的便宜运算 即slist.erase(it1,it1+num_tries)
 // 泛型算法 头文件#include<algorithm>
-
+// find(first,last,elem)用于搜索无序集合中是否存在某值，用iterator[first,last)标出。
+// binary_search(first,last,elem)用于有序集合的搜索，搜索到了返回true，未搜索到返回false
+// count() 返回数值相符的元素数目
+// search() 比对某个容器内是否存在某个子序列，返回成功则指向序列起始处
+//  函数指针 bool (*pred)(int,int) pred 为函数，*pred为函数的内存地址
+// #include <map> map<string,int> words;
+// map对象有一个名为first的member 对应于key，有一个名为second的member 对英语value
+// map查询法是利用map的find()函数， 返回一个iterator,反之返回一个end()
+// map的count()函数，count()会返回某特定项在map内的个数
+// 所有成员函数都必须在class主体内进行声明，至于是否要同时进行定义，可自由决定，如果要在class主体内定义，这个member function会自动地视为inline函数。
+// 要在class主体之外定义member function,必须使用特殊的语法，目的在于分辨该函数究竟属于哪一个class。如果希望该函数为inline，应该在最前面指定关键字inline
+  //inline bool Stack::empty() {
+  //    return _stack.empty();
+  //}
+  //
+  //bool Stack::pop( string &elem ) {
+  //    //...
+  //}
+  // class名称之后的两个冒号即所谓的class scope resolution 类作用域解析运算符
+// class定义及其inline member function 通常都会被放在与class同名的头文件中。
+// 构造函数constructor的函数名称必须与class名称相同，语法规定：
+  // constructor 不应指定返回类型，不用返回任何值
+  // 可以被重载
+// 成员初始化列表
+  // Triangular::Triangular(int len, int bp) : _name("Triangular"){ //... }
+// 析构函数 destructor 是用户自定义的一个class member,一旦某个class提供有destructor，当其obj结束生命时，便会自动调用destructor处理善后，Destructor主要用来释放在constructor或对象生命周期中分配的资源
+// Destructor 严格规定
+  // class名称前再加上'~'前缀，它绝对不会有返回值，也没有任何参数。由于参数裂变为空，绝不可能被重载(overloaded)
+    //class Matrix {
+    //public:
+    //    Matrix( int row, int col ) : _row( row ), _col( col ) {
+    //        _pmat = new double[ row * col ];
+    //    }
+    //    ~Matrix() {
+    //        delete [] _pmat;
+    //    }
+    //private:
+    //    int  _row, _col;
+    //    double* _pmat;
+    //};
+// 当我们在设计class时，必须问自己，在此class之上进行的"成员逐一初始化"的行为模式是否适当，肯定则不需要copy constructor,否定则需要copy constructor
+// 面向对象编程风格的三个独特概念是：继承、多态、动态绑定
