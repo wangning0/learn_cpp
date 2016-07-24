@@ -89,3 +89,40 @@
 * 两个指针相减的结果的类型是一种名为`ptrdiff_t`的标准库类型，和`size_t`一样
 * `char *const cp`和`const char *p`,前者是cp不变，指向字符的指针常数，const指针，后者是定义一个指向字符常数的指针，cp可变，字符不可变。
 * m%(-n)等价于m%n,(-m)%n等于-(m%n)
+* `垂悬else`当`if`分支多于`else`分支，c++会规定else与离它最近的未匹配的if匹配，从而消除程序的二义性。解决方法为花括号
+* `pair`模版类型，`pair<string, int>`的成员有`first`和`second`两个，对应两个参数。也可以是`pair<int, string>`,头文件为`string`
+* `throw表达式`，异常检测部分使用`throw`表达式来表示它遇到了无法处理的问题。我们说`throw`引发了异常
+* `try语句块`异常处理部分使用try语句块处理异常。try语句块以关键字try开始，并以一个或多个`catch子句`结束。
+* 标准异常的头文件`exception`、`stdexcept`、`new`、`type_info`,(c++ primer 176页)
+* **函数的返回类型**不能是数组类型或函数类型，但是可以是指向数组或函数的指针
+* `自动对象`只存在于块执行期间的对象
+* `局部静态对象`在程序的执行路径第一次经过对象定义语句时初始化，并且直到程序终止才被销毁，在此期间忌食对象所在的函数结束执行也不会对它有影响
+
+        size_t count_calls () {
+            static size_t ctr = 0;
+            return ++ctr;
+        }
+     
+        int main() {
+            for (size_t i = 0; i < 10; ++i) {
+                cout << count_calls() << endl;
+            }
+            return 0;
+        }
+* 当形参是引用类型时，我们说它对应的实参被`引用传递`或者函数被`传引用调用`
+* 当实参的值被拷贝给形参时，形参和实参是两个独立的对象，我们说这样的实参被`值传递`或者说函数被`传值调用`
+* 当用实参初始化形参时会忽略掉顶层`const`
+* 不能用指向`const int`对象的指针初始化`int *`
+
+        void reset(int *p){ // ...}
+        int i = 42;
+        const int ci = i;
+        reset(&ci); //错误
+* 尽量使用常量引用,把函数不会改变的形参定义成常量引用
+* 易犯错误
+
+        string:size_type find_char(string &s,string::size_type &occurs);
+        //下面会报错
+        find_char('hello world',ctr);//只能作用域string对象
+        //改成
+        string:size_type find_char(const string &s,string::size_type &occurs);
