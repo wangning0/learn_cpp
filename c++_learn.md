@@ -125,4 +125,28 @@
         //下面会报错
         find_char('hello world',ctr);//只能作用域string对象
         //改成
-        string:size_type find_char(const string &s,string::size_type &occurs);
+        string:size_type find_char(const         string &s,string::size_type &occurs);
+   
+* 当我们为函数传递一个数组时，实际上传递的是指向数组首元素的指针
+* 指针引用了`begin()`和`end()`标准库函数，表示头指针和尾指针
+* 二维数组作为参数，`void print(int (*matrix)[10])`等价于`void print(int matrix[][10])`
+* 如果函数的实参数量未知但是全部实参的类型都相同，我们可以使用`initializer_list`类型的形参，定义在头文件`initializer_list`中
+
+        //sum({1,2,3,4})
+        int sum ( initializer_list<int> lis ) {
+            int s = 0;
+            for (auto beg = lis.begin(), end = lis.end(); beg != end; beg++) {
+                s += *beg;
+            }
+            return s;
+        }
+* 因为数组不能被拷贝，所以函数不能返回数组，所以函数一般返回数组的指针或引用
+* 如果我们想定义一个返回数组指针的函数，则数组的维度必须跟在函数名字之后。然而，函数的形参列表也跟在函数名字后面且形参列表应该先于数组的维度`Type (*function(params_list))[dimension]`
+* 解析 `int (*func(int i))[10]` 
+
+    * func(int i) 表示调用func函数时需要一个int类型的实参
+    * (*func(int i))意味着我们可以对函数调用的结果执行解引用操作
+    * (*func(int i))[10]表示解引用func的调用将得到一个大小是10的数组
+    * int (*func(int i))[10]数组为类型为整型
+* 如果同一作用域内的几个函数名字相同但形参列表不同，我们称之为重载函数
+* 不允许两个函数除了返回类型外其他所有的要素都相同
