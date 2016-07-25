@@ -150,3 +150,33 @@
     * int (*func(int i))[10]数组为类型为整型
 * 如果同一作用域内的几个函数名字相同但形参列表不同，我们称之为重载函数
 * 不允许两个函数除了返回类型外其他所有的要素都相同
+* `const_cast`可以进行强制类型转换
+* `重载与作用域`，如果我们在内层作用域中声明名字，他将隐藏外层作用域中声明的同名实体。在c++中，名字查找发生在类型检查之前。
+* 默认实参，一旦某个形参被赋予了默认值，它**后面**的所有形参都必须有默认值`string screex(int ht = 24, int wid = 80);`使用默认实参调用函数时，只能省略尾部的实参，所以一般将经常使用默认值的形参出现在后面
+* 在给定的作用域中一个形参只能被赋予一次默认实参
+* 内联函数可避免函数调用的开销，将函数指定为内联函数(inline)，通常就是将它在每个调用点上"内联地"展开
+* 把内联函数和`constexpr`函数放在头文件内
+* `char`可以类型提升为`int`
+* 当我们把函数名作为一个值使用时，该函数自动地转换成指针
+
+        bool lengthCompare( const string &, const string & );
+        bool (*pf)(const string &,const string &);
+        //使用函数指针
+        pf = lengthCompare;
+        //pf = & lengthCompare;
+        //直接使用指向函数的指针调用该函数
+        bool b1 = pf('hello','world');
+        //bool b2 = (*pf)('hello','world');
+        //bool b3 = lengthCompare('hello','world');
+* 返回指向函数的指针
+
+        using F = int (int*,int);//F是函数类型，不是指针
+        using PF = int(*)(int *,int);//PF是指针类型
+        PF f1(int);//正确：PF是指向函数的指针，f1是返回指针函数的指针
+        F *f1(int)
+        //等价于
+        int (*f1(int))(int*,int);
+        //分析
+        //f1有形参列表，f1是个函数
+        //f1前面有* f1返回的是一个指针
+        //指针的类型本身也有形参列表，因此指针指向函数，该函数的返回类型是int
