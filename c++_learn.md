@@ -254,3 +254,50 @@
         };
 * 一般来说，最好在类定义开始或结束前的位置集中声明友元
 * `vector<Screen> screens{Screen(24,80,' ')};`
+* 非常量版本的函数对于常量对象是不可用的，所以我们只能在一个常量对象上调用const成员函数
+* 在非常量对象上调用常量版本或非常量版本，但显然此时非常量版本是一个更好的匹配
+* 每个类定义了唯一的类型，对于两个类来说，即使它们的成员完全一样，这两个类也是两个不同的类型
+* 隐式内联函数是指函数定义在类的内部，显式外联函数是指要用关键字`inline`并且函数声明在类的内部，定义在类的外部
+* 如果一个类指定了友元类，则友元类的成员函数可以访问此类包括非公有成员在内的所有成员。
+
+        class Screen {
+            friend class Window_mgr;
+            //Window_mgr可以访问Screen类内的成员函数
+        }      
+* 友元关系不具有传递性，每个类负责控制自己的友元类或友元函数
+* 令成员函数作为友元
+
+        class Screen {
+            friend void Window_mgr::clear();
+            //要明确指出是哪个类
+        }
+        // 按照如下方式设计程序
+        //先定义Window_mgr类，其中声明clear啊函数，但是不能定义它
+        //接下来定义Screen，包括对clear的友元声明
+        //最后定义clear,此时它才可以使用Screen的成员
+* 一般来说，内层作用域可以重新定义外层作用域中的名字，即使该名字已经在内层作用域中使用过。但是，如果成员使用了外层作用域中的某个名字，而该名字代表一种类型，则类不能在之后重新定义该名字。
+
+        typedof double Money;
+        class Account {
+        public:
+            Money balance() { return bal; } //外层
+        private:
+            typedif double Money; //错误：不能重新定义Money
+        }
+* 静态数据成员必须在类的外部定义和初始化每个静态成员，类似于全局变量，静态数据成员定义在任何函数之外，因此一旦他被定义，就将一直存在于程序的整个生命周期中
+* 静态成员和指针成员可以是不完全类型
+
+        
+        class Bar {
+        public:
+            //...
+        private:
+            static Bar mem1; //true:静态成员可以是不完全类型
+            Bar *mem2; //true:指针成员可以是不完全类型
+            Bae mem3;//false:数据成员必须是完全类型
+        }
+* 静态成员可以做默认实参
+* `static double rate = 6.8;`
+
+    **错误**`static constexpr double rate 6.8;`
+* 
