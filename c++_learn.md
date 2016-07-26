@@ -180,3 +180,77 @@
         //f1有形参列表，f1是个函数
         //f1前面有* f1返回的是一个指针
         //指针的类型本身也有形参列表，因此指针指向函数，该函数的返回类型是int
+        
+## 类
+* 类的基本思想是**数据抽象**和**封装**。数据抽象是一种依赖于**接口**和**实现**分离的编程技术。封装实现了类的接口和实现的分离。封装后的类隐藏了它的实现细节，也就是说，类的用户只能使用接口而无法访问实现部分。
+
+        struct Sales_data
+        {
+            string isbn() const { return bookNo;};
+            Sales_data& combine ( const Sales_data& );
+            double avg_price () const;
+            string bookNo;
+            unsigned units_sold = 0;
+            double revenue = 0.0;
+        };
+
+* 引入const成员函数`string isbn() const {return bookNo}`,`const`的作用就是修改隐式this指针的类型，默认情况下，this的类型是指向类类型非常亮版本的常量指针。意味着我们不能把this绑定到一个常量对象上去，这一情况使得我们不能在一个常量对象上调用普通的成员函数。若在函数体内不会改变this所指的对象，所以把this设置为指向常量的指针有助于 提高函数的灵活性。
+* 在类的外部定义成员函数，需要使用作用域运算符
+
+        double Sales_data::avg_price() const {
+            //...
+        }
+* 定义一个返回`this`对象的函数
+
+        Sales_data& Sales_data::combine(const Sales_data &rhs) {
+            units_sold += rhs.units_sold;
+            revenue += rhs.revenue;
+            return *this;
+        }
+* 一般来说，如果非成员函数是类接口的组成部分，则这些函数的声明应该与类在同一个头文件内。
+* 类通过一个或几个特殊的成员函数来控制其对象的初始化过程，这些函数叫做`构造函数`.构造函数的任务是初始化类对象的数据成员，无论何时只要类的对象被创建，就会执行构造函数。
+* `构造函数`的名字和类名相同。没有返回类型，可以重载，不能被声明称const，因为当我们创建一个const对象时，直到构造函数完成初始化过程，对象才能真正取得其"常量"属性，因此，构造函数在const对象的构造过程中可以向其写值。
+* 只有当类没有声明任何构造函数时，编译器才会自动地生成默认构造函数
+* 定义构造函数
+
+        struct Sales_data
+        {
+            //新增的构造函数
+            Sales_data() = default; //默认构造函数
+            Sales_data(const string &s): bookNo(s) { }
+            Sales_data(const string &s, unsigned n, double p ): bookNo(s), units_sold(n), revenue(p*n) { }
+            Sales_data(std::istream &);//类的外部定义构造函数
+            //之已有的其他成员
+            string isbn() const { return bookNo;};
+            Sales_data& combine ( const Sales_data& );
+            double avg_price () const;
+            string bookNo;
+            unsigned units_sold = 0;
+            double revenue = 0.0;
+        };
+        Sales_data::Sales_data(std::istream &is){
+            read( is, *this );
+        }
+* 使用`class`和`struct`定义类唯一的区别就是默认的访问权限
+* 封装是从接口上实现的分离。它隐藏了一个类型的实现细节，封装是通过实现一个类的私有部分的执行
+* 类可以允许其他类或者函数访问它的非公有成员，方法是令其它类或者函数成为它的`友元`,如果类想把一个函数作为它的友元，只需要增加一条以`friend`关键字开始的函数声明语句即可
+
+        class Sales_data {
+        // 为Sales_data的非成员函数所做的友元声明
+        friend Sales_data add(const Sales_data &, const Sales_data &);
+        friend std::istream &read(std::istream &is, Sales_data &item);
+        friend std::ostream &print(std::ostream &os, const Sales_data &item);
+        public:
+            Sales_data() = default;
+            Sales_data(const std::string &s):bookNo(s) { }
+            Sales_data(const std::string &s, unsigned n, double p):bookNo(s), units_sold(n), revenue(n*p){ }
+            Sales_data(std::istream &is) { read(is, *this); }
+            std::string isbn() const { return bookNo; };
+            Sales_data& combine(const Sales_data&);
+        private:
+            std::string bookNo;
+            unsigned units_sold = 0;
+            double revenue = 0.0;
+        };
+* 一般来说，最好在类定义开始或结束前的位置集中声明友元
+* `vector<Screen> screens{Screen(24,80,' ')};`
