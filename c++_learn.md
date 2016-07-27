@@ -300,4 +300,30 @@
 * `static double rate = 6.8;`
 
     **错误**`static constexpr double rate 6.8;`
+## IO类
+* `iostream`定义了用于读写流的基本类型，`fstream`定义了读写明明文件的类型，`sstream`定义了读写内存`string`对象的类型
+
+    |    头文件     |       类型     |      类型     |
+    | ------------ | ------------- | ------------  |
+    | iostream     | istream       | wistream      |
+    | iostream     | ostream       | wostream      |    
+    | iostream     | ostream       | wostream      |
+    | fstream      | ifstream      | wifstream     |
+    | fstream      | ofstream      | wofstream     |
+    | fstream      | fstream       | wfstream      |
+    | sstream      | isstream      | wistringstream|
+    | sstream      | osstream      | wostringstream|
+    | sstream      | stringstream  | stringstream  |
+* IO对象无拷贝或赋值，因此我们不能将形参或返回类型设置为流类型。进行IO操作的函数通常以引用方式传递和返回流。读写一个IO对象会改变其状态，因此传递和返回的引用不能是const的
+* `strm::badbit` 用来指出流已崩溃，`strm::failbit`用来指出一个IO操作失败了，`strm::eofbit`用来指出流到达了文件结束,`strm::goodbit`用来指出流未处于错误状态，`s.eof()`若流s的eofbit置位，则返回true,`s.fail()`若流s的failbit或badbit置位，返回true，`s.good()`处于有效状态返回true,`s.clear()`将流s中的所有条件状态位复位，将流的状态设置成有效，`s.clear(flags)` ,根据给定的flags标识位，将流s中对应条件状态位复位。`s..setstate(flags)`根据给定的flags标识位，将流s中对应条件状态位置位，`s.rdstate()`返回流s的当前条件状态
+* `endl`完成换行并刷新缓冲区的工作，`flush`刷新缓冲区，但不输出任何额外的字符，`ends`向缓冲区插入一个空字符，然后刷新缓冲区，如果想在每次输出操作后都刷新缓冲区，可以使用`unitbuf`操纵符，告诉流接下来的每次写操作之后都进行一次flush操作，`nounitbuf`操作符则重置流，使其恢复使用正常的系统管理的缓冲区刷新机制
 * 
+操作          | 说明 
+------------ | -------------
+fstream fstrm | 创建一个未绑定的文件流，fstream是头文件fstream定义的一个类型  
+fstream fstrm(s)|创建一个fstream，并打开名为s的文件，s可以是string类型，可以是一个指向c风格字符串的指针，默认的文件模式mode依赖于fstream的类型
+fstream fstrm(s,mode) | 与前一个构造函数类似，但按指定mode打开文件
+fstrm.open(s) | 打开名为s的文件，并将文件雨fstrm绑定，返回void
+fstrm.close()| 关闭fstrm绑定的文件，返回void
+fstrm.is_open()| 返回bool，指出域fstrm绑定的文件时否成功打开并且尚未关闭
+## 顺序容器
