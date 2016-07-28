@@ -327,3 +327,50 @@ fstrm.open(s) | 打开名为s的文件，并将文件雨fstrm绑定，返回void
 fstrm.close()| 关闭fstrm绑定的文件，返回void
 fstrm.is_open()| 返回bool，指出域fstrm绑定的文件时否成功打开并且尚未关闭
 ## 顺序容器
+* `vector`可变大小数组，支持快速随机访问。在尾部之外的位置插入和删除元素可能很慢
+* `deque`双端队列。支持快速随机访问。在头尾位置插入删除速度很快
+* `list`双向链表。只支持双向顺序访问。在list中任何位置进行插入和删除操作速度都很快
+* `forward_list`单向链表。只支持单向顺序访问。在链表任何位置今日难过插入删除操作都很快速
+* `array`固定大小数组。支持快速随机访问。不能添加或删除元素
+* `string`与vector相似的容器，但专门用于保存字符。随机访问快，在尾部插入删除速度快
+* 较旧的编译器可能需要在两个尖括号之间键入空格。`vector<vector<string> > lines;`
+* 迭代器范围是左闭合区间[begin,end)表示范围自begin开始，于end之前结束，迭代器begin和end必须指向相同的容器。
+* `const_iterator`表示不变的迭代器
+* `begin`和`end`有多个版本:带r的版本返回反向迭代器，以c开头的版本则返回const迭代器
+* 标准库array具有固定大小，当定义一个`array`时，除了指定元素类型，还需要指定容器大小`array<int,42>` `array<string,10>`
+* 标准库array与内置数组不一样，我们不能对内置数组类型进行拷贝或对象赋值操作，但是对于标准库`array`是可以的
+
+        int digs[10] = {0,1,2,3,4,5,6,7,8,9};
+        int cpy[10] = digs; //error
+        array<int,10> digits = {0,1,2,3,4,5,6,7,8,9};
+        array<int,10> copy = digits;
+* c={a,b,c...} 将c1种元素替换为初始化列表中元素的拷贝(array不适用)
+* `assign`操作不适用于关联容器和`array`
+* `seq.assign(b,e)`将seq中的元素替换为迭代器b和e所表示的范围中的元素
+* `seq.assign(il)`将seq中的元素替换为初始化列表li中的元素
+* `seq.assign(n,t)`将seq中的元素替换为n个值为t的元素
+* `swap`操作交换两个相同类型容器的内容
+* 成员函数`size`返回容器中元素的数目，`empty`当size为0时返回true，`max_size`返回一个大于或等于该类型容器所能容纳的最大元素的值。`forward_list`支持`max_size`和`empty`但不支持`size`
+* `forward_list`有自己专门的`insert`和`emplace`操作，不支持`push_back`和`emplace_front`
+* `vector`和`string`不支持`push_front`和`emplace_back`
+* `c.insert(p,t)`在迭代器p指向的元素之前创建一个值为t的元素
+* `c.insert(p,n,t)`在迭代器p指向的元素之前创建n个值为t的元素
+* `c.insert(p,b,e)`将迭代器b和e指定的范围内的元素插入到迭代器p指向的元素之前
+* `c.insert(p,li)`il是一个花括号包围的元素值列表，将这些给定值插入到迭代器p指向的元素之前
+* `emplace_front`、`emplace`和`emplace_back`调用他们的时候则是将参数传递给元素类型的构造函数
+
+        c.emplace_front('asdsad',25,13.99);
+        //c.push_front('asdsad',25,13.99);//error
+* 如果我们希望确保下标是合法的，可以使用at成员函数，at成员函数类似下标运算符，如果下标越界，at会抛出一个out_of_range异常
+* `c.pop_back()`删除c中尾元素
+* `c.pop_front()`删除c中首元素
+* `c.erase(p)`删除迭代器p所指定的元素，返回一个指向被删元素之后元素的迭代器，若p指向尾元素，则返回尾后迭代器。
+* `c.erase(b,e)`删除迭代器b和e所指定范围内的元素。返回一个指向最后一个被元素之后元素的迭代器，若e本就是尾后迭代器，则函数也返回尾后迭代器
+* `c.clear()`删除c中的所有元素。
+* 特殊的`forward_list`操作
+
+    * `lst.before_begin() lst.cbefore_begin()`返回指向链表首元素之前不存在的元素的迭代器。此迭代器不能解引用，cbefore_begin()返回一个const_iterator
+    * `lst.insert_after(p,t)``lst.insert_after(p,n,t)``lst.insert_after(p,b,e)``lst.insert_after(p,li)`
+    * `emplace_after(p,args)`使用args在p指定的位置之后创建一个元素。返回一个指向这个新元素的迭代器
+    * `list.erase_after(p)` `list.erase_after(b,e)`删除p指向的位置之后的元素，或删除从b之后直到（不包含）e之间的元素。返回一个指向被删元素之后元素的迭代器，若不存在这样的元素，则返回尾后迭代器
+* 我们可以用`resize`来增大或缩小容器
