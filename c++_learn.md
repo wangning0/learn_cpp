@@ -401,3 +401,42 @@ fstrm.is_open()| 返回bool，指出域fstrm绑定的文件时否成功打开并
 * 如果我们传递了一个字符串字面值，用于保存和的对象的类型将是`const char*`，`string`有+号运算符，但是`const char*`没有
 * `equal(r1.begin(),r1.end(),r2.begin())`用于确定连个序列是否保存相同的值，非常重要的假设是它假定第二个序列至少与第一个序列一样长
 * `fill(b,e,val)`将val赋予给输入序列中的每个元素
+* `fill_n(dest,n,val)`将给定值赋予迭代器指向的元素开始的指定个元素，但是从dest开始的序列至少包含n个元素
+* `back_inserter`位于头文件`iterator`中，返回一个与该容器绑定的插入迭代器
+
+        auto it = back_inserter(vec);
+        *it = 42; //在vec尾部插入一个元素
+* 拷贝算法(`copy`)接收三个迭代器，前两个表示范围，后一个表示目的序列的起始位置
+* `unique`算法重排输入序列，将相邻的重复项消除，并返回一个指向不重复范围末尾的迭代器
+* 保持相同长度的单词按字典序排列，可以使用`stable_sort`算法
+* `lambda表达式`的形式：`[capture list](parameter list)-> return type {function body}`capture list是一个lambda所在函数中定义的局部变量的列表，通常为空
+* `find_if(b,e,f)`第三个参数必须是一个一元谓词
+* 当我们混合使用隐式捕获和显示捕获时，捕获列表中的第一个元素必须是一个&或=。此符号指定了默认捕获方式为引用或值。
+* **标准库bind函数**它定义在头文件functional中，可以将bind函数看作一个通用的函数适配器，他接受一个可调用对象，生成一个新的可调用对象来"适应"原对象的参数列表`auto newCallable = bind(callable,arg_list)`,newCallable本身时一个可调用对象，arg_list是一个逗号分隔的参数列表，对应给定的callable的参数。arg_list中的参数可能包含形如_n的名字，其中n是一个整数，这些参数是"占位符"，表示newCallable的参数，它们占据了传递给newCallable的参数的位置。数值n表示生成的可调用对象中参数的位置:_1为newCallable的第一个参数，_2为第二个参数。
+        
+        //此bind调用生成一个可调用对象，将check_size的第二个参数绑定到sz的值
+        auto check6 = bind(check_size,_1,6)
+* using namespace std::placeholders;
+* 如果我们希望传递给bind一个对象而不拷贝它，就必须使用标准库`ref`函数
+
+        for_each(w.begin(),w.end(),bind(print,ref(os),_1,' '));
+      
+* 标准库还有一个`cref`的函数，生成一个保存const的引用类，都存在于头文件`functional`中
+
+## 关联容器
+* `multimap`表示关键字可重复出现的map，`multiset`表示关键字可重复出现的set，`unordered_map`无序map,`unordered_set`无序的set，`unordered_multimap`无序的关键字可以重复出现的map，`unordered_multiset`无序的关键字可以重复出现的set
+
+## 重载运算与类型转换
+* 不能被重载的运算符:`::`、`.*`、`.`、`?:`
+* `data1+data2` 等价于 `operator+(data1,data2)`
+* `data1 += data2`等价于`data1.operator+=(data2)`
+* 通常情况下，不应该重载逗号、取地址、逻辑与和逻辑或运算符
+* 重载的运算符是具有特殊名字的函数:它们的名字有关键字operator和其后要定义的运算符号共同组成。和其他函数一样，重载的运算符也包含返回类型，参数列表以及函数体
+* 对称性运算符必须定义成非成员函数，改变对象的状态的运算符定义为成员函数,`= [] ->`必须是成员函数
+## 动态内存
+* 除了静态内存和栈内存，每个程序还拥有一个内存池，这部分内存被称作自由空间(free store)或堆(heap)
+* 两种智能指针，存在与头文件`memory`中
+
+    * `shared_ptr`允许多个指针指向同一个对象
+    * `unique_ptr`则“独占”所指向的对象
+    
