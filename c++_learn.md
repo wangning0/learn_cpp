@@ -435,8 +435,25 @@ fstrm.is_open()| 返回bool，指出域fstrm绑定的文件时否成功打开并
 * 对称性运算符必须定义成非成员函数，改变对象的状态的运算符定义为成员函数,`= [] ->`必须是成员函数
 ## 动态内存
 * 除了静态内存和栈内存，每个程序还拥有一个内存池，这部分内存被称作自由空间(free store)或堆(heap)
-* 两种智能指针，存在与头文件`memory`中
+* 两种智能指针，存在与头文件`memory`中定义，自动释放所指向的对象
 
     * `shared_ptr`允许多个指针指向同一个对象
     * `unique_ptr`则“独占”所指向的对象
-    
+* `shared_ptr<T> sp uniqe_ptr<T> up` 空智能指针，可以指向类型为T的对象
+* `p`将p用作一个条件判断，若p指向一个对象，则为true
+* `*p`解引用p，获得它指向的对象
+* `p->mem`等价于`(*p).mem`
+* `p.get()`返回p中保存的指针，小心食用，若智能指针释放了其对象，返回的指针所指向的对象也就消失了
+* `swap(p,q)`交换p和q的指针 `p.swap(q)`;
+* **以上操作shared_ptr和uniue_ptr都支持**
+* **以下操作shared_ptr独有的操作**
+* `make_shared<T>(args)`返回一个shared_ptr指向一个动态分配的类型为T的对象，食用args初始化对象`shared_ptr<string> p3 = make_shared<string>(10,'9')`
+* `shared_ptr<T>p(q)`p是shared_ptr q的拷贝
+* `p=q`相互转化
+* `p.unique()`若`p.use_count()`为1，则true
+* `p.use_count()`返回与p共享对象的智能指针数量
+* ****************
+* 一旦一个`shared_ptr`的计数器变为0，他就会自动释放自己所管理的容器，还会自动释放相关联的内存
+## 面向对象程序设计
+* 面向对象程序设计基于三个基本概念：数据抽象、继承和动态绑定
+* 
