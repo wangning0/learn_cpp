@@ -454,7 +454,10 @@ fstrm.is_open()| 返回bool，指出域fstrm绑定的文件时否成功打开并
 * `p.use_count()`返回与p共享对象的智能指针数量
 * ****************
 * 一旦一个`shared_ptr`的计数器变为0，他就会自动释放自己所管理的容器，还会自动释放相关联的内存
-* 
+* 用new分配const对象是合法的`const int *pci = new const int(1024)` `const string *pcs = new const string`,类似其他任何const对象，一个动态分配的const对象必须进行初始化
+* 如果new不能分配所要求的内存空间，他会抛出一个类行为`bad_alloc`的异常
+* `定位new``int *p2 = new (nothrow) int`定位new允许我们向new传递额外的参数
+* `通过delete释放动态内存`，销毁给定的指针指向的对象，释放对应的内存
 
 ## 面向对象程序设计
 * 面向对象程序设计基于三个基本概念：数据抽象、继承和动态绑定
